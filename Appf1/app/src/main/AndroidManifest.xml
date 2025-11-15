@@ -39,7 +39,7 @@
         <activity
             android:name=".activities.GrandPrixDetailActivity"
             android:exported="false"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.ScheduleActivity" />
         <activity
             android:name=".activities.ResultsActivity"
             android:exported="false" />
@@ -50,7 +50,7 @@
             android:name=".activities.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ScheduleActivity"
+            android:name=".activities.ScheduleActivity"
             android:exported="false" />
 
         <activity

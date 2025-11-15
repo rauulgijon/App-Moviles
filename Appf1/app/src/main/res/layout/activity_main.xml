@@ -27,26 +27,15 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
+            <!-- ✅ SECCIÓN DE TOP NEWS ELIMINADA PARA LIMPIAR -->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TOP NEWS"
+                android:text="PRÓXIMA CARRERA"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textColor="@color/primary"
                 android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Aquí iría un RecyclerView de noticias. Por ahora, es un placeholder."
-                android:layout_marginBottom="24dp"/> <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PRÓXIMA CARRERA"
-            android:textStyle="bold"
-            android:textColor="@color/primary"
-            android:layout_marginBottom="8dp"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardNextRace"

@@ -91,20 +91,21 @@
                 app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="@color/white"
                 android:layout_marginBottom="16dp"
-                android:visibility="gone"> <LinearLayout
-                android:padding="16dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:visibility="gone">
+                <LinearLayout
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView android:text="RESULTADOS DE CARRERA" android:textSize="12sp" android:textStyle="bold" android:textColor="@color/primary" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <TextView android:text="RESULTADOS DE CARRERA" android:textSize="12sp" android:textStyle="bold" android:textColor="@color/primary" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
-                <TextView android:text="Ganador:" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                <TextView android:id="@+id/txtWinner" android:textSize="18sp" android:textColor="@color/black" android:layout_marginBottom="8dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                    <TextView android:text="Ganador:" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <TextView android:id="@+id/txtWinner" android:textSize="18sp" android:textColor="@color/black" android:layout_marginBottom="8dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
 
-                <TextView android:text="Tiempo:" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                <TextView android:id="@+id/txtTime" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            </LinearLayout>
+                    <TextView android:text="Tiempo:" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <TextView android:id="@+id/txtTime" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <Button
@@ -112,13 +113,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/open_maps"
-                style="@style/Widget.App.Button"/> </LinearLayout>
+                style="@style/Widget.App.Button"/>
+        </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_menu" />
+    <!-- ✅ ELIMINADO EL BottomNavigationView DE AQUÍ -->
 
 </LinearLayout>

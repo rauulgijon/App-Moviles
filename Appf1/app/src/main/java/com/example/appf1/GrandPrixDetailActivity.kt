@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.appf1.R
-import com.example.appf1.ScheduleActivity // Importar
+// import com.example.appf1.ScheduleActivity // Ya no es necesario si moviste ScheduleActivity a 'activities'
 import com.example.appf1.Utils
 import com.example.appf1.databinding.ActivityGrandPrixDetailBinding
 import viewmodel.RaceViewModel
@@ -68,37 +68,5 @@ class GrandPrixDetailActivity : AppCompatActivity() {
             }
         }
 
-        // --- Menú inferior (Actualizado) ---
-        binding.bottomNav.menu.setGroupCheckable(0, false, true)
-        binding.bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finishAffinity()
-                    true
-                }
-                R.id.nav_schedule -> {
-                    startActivity(Intent(this, ScheduleActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_results -> {
-                    startActivity(Intent(this, ResultsActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_fantasy -> {
-                    startActivity(Intent(this, FantasyActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
     }
 }

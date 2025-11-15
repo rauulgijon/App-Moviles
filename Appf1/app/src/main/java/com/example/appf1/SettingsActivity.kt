@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.appf1.R
-import com.example.appf1.ScheduleActivity
+import com.example.appf1.activities.ScheduleActivity
 import com.example.appf1.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
