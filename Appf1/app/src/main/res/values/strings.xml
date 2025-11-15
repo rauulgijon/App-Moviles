@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">F1 App</string>
+    <string name="enter">Entrar</string>
+    <string name="welcome_message">Bienvenido a F1 App</string>
+
+    <string name="welcome_next_gp">Próximo Gran Premio</string>
+    <string name="view_details">Ver detalles</string>
+    <string name="go_home">Ir al inicio</string>
+
+    <string name="nav_home">Inicio</string>
+    <string name="nav_schedule">Calendario</string>
+    <string name="nav_results">Resultados</string>
+    <string name="nav_fantasy">Fantasy</string>
+    <string name="nav_settings">Ajustes</string>
+    <string name="nav_about">Acerca de</string>
+
+    <string name="open_maps">Abrir en Maps</string>
+    <string name="no_winner">Sin ganador</string>
+    <string name="no_time">Sin tiempo</string>
+    <string name="error_no_race">Carrera no encontrada</string>
+
+    <string name="results_info">Resultados disponibles: %1$d</string>
+
+    <string name="fantasy_title">Fantasy - Predice un piloto</string>
+    <string name="fantasy_points">Puntos asignados</string>
+    <string name="fantasy_predict">Guardar predicción</string>
+    <string name="fantasy_saved">Predicción guardada: %1$s (%2$d puntos)</string>
+
+    <string name="settings_title">Ajustes</string>
+    <string name="enable_notifications">Activar notificaciones</string>
+    <string name="lang_system">Usar idioma del sistema</string>
+    <string name="nickname">Apodo</string>
+    <string name="save">Guardar</string>
+    <string name="about_text">Aplicación de ejemplo de Fórmula 1 creada en Android Studio con Room y Material Design.</string>
+
+    <string name="nickname_saved">Apodo guardado: %1$s</string>
+    <string name="notifications_changed">Notificaciones: %1$s</string>
+
+</resources>
