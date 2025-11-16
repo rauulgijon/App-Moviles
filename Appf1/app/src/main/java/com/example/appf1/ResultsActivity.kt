@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.appf1.BaseActivity
 import com.example.appf1.R
 // import com.example.appf1.ScheduleActivity // Ya no es necesario si moviste ScheduleActivity a 'activities'
 import com.example.appf1.adapter.DriverAdapter
@@ -15,7 +16,7 @@ import com.example.appf1.databinding.ActivityResultsBinding
 import com.google.android.material.tabs.TabLayout
 import viewmodel.RaceViewModel
 
-class ResultsActivity : AppCompatActivity() {
+class ResultsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityResultsBinding
     private val vm: RaceViewModel by viewModels()

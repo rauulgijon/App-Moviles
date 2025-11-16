@@ -8,8 +8,8 @@ import model.Driver // Importar Driver
 import model.Race
 import model.Team   // Importar Team
 
-// ✅ AÑADIMOS Driver::class y Team::class y subimos la VERSIÓN a 2
-@Database(entities = [Race::class, Driver::class, Team::class], version = 2, exportSchema = false)
+// ✅ AÑADIMOS Driver::class y Team::class y subimos la VERSIÓN a 3
+@Database(entities = [Race::class, Driver::class, Team::class], version = 3, exportSchema = false) // ✅ VERSIÓN CAMBIADA A 3
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun raceDao(): RaceDao
@@ -27,8 +27,6 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "f1_database"
                 )
-                    // ✅ AÑADIR ESTO: Al cambiar la BBDD, borra la antigua
-                    // Es necesario al subir de versión, o la app crasheará
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

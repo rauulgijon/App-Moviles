@@ -27,6 +27,9 @@ class TeamAdapter : ListAdapter<Team, TeamAdapter.TeamViewHolder>(TeamDiff()) {
             // Cargamos logo y coche
             Utils.loadImageInto(team.logoUrl, b.imgLogo, b.root.context)
             Utils.loadImageInto(team.carUrl, b.imgCar, b.root.context)
+
+            // ✅ LÍNEA AÑADIDA (Formatea los puntos)
+            b.txtPoints.text = "${team.points} PTS"
         }
     }
 

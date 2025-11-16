@@ -12,5 +12,6 @@ data class Driver(
     val number: Int,      // Ej: 44
     val teamName: String, // Ej: "Mercedes"
     val nationality: String,
-    val imageUrl: String? // URL de la foto del piloto (de Drive)
+    val imageUrl: String?, // URL de la foto del piloto (de Drive)
+    val points: Int = 0 // ✅ CAMPO AÑADIDO
 ) : Serializable

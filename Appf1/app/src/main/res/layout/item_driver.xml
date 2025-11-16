@@ -46,14 +46,31 @@
                 android:textColor="@color/gray"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtNumber"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="44"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary"
-            android:layout_marginEnd="8dp"/>
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:id="@+id/txtPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="350 PTS"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/txtNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="44"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary"/>
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -59,8 +59,9 @@ dependencies {
     implementation(libs.androidx.activity)
     kapt("androidx.room:room-compiler:2.6.1")
 
-    // Volley (Para cargar imágenes desde URL / Google Drive)
-    implementation("com.android.volley:volley:1.2.1")
+    // ✅ LIBRERÍA DE IMÁGENES (Coil)
+    implementation("io.coil-kt:coil:2.6.0")
+    // ❌ implementation("com.android.volley:volley:1.2.1") // <- Volley eliminado
 
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
@@ -70,8 +71,6 @@ dependencies {
     // RecyclerView y CardView (Para listas)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.cardview:cardview:1.0.0")
-
-    // ✅ LIBRERÍA PARA IMÁGENES CIRCULARES (LA QUE TE FALTA)
 
     // Tests
     testImplementation("junit:junit:4.13.2")

@@ -2,9 +2,10 @@ package com.example.appf1.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.appf1.BaseActivity
 import com.example.appf1.databinding.ActivityAboutBinding
 
-class AboutActivity : AppCompatActivity() {
+class AboutActivity : BaseActivity() {
     private lateinit var binding: ActivityAboutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

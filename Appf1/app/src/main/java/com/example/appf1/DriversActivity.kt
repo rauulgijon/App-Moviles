@@ -4,11 +4,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.appf1.BaseActivity
 import com.example.appf1.adapter.DriverAdapter
 import com.example.appf1.databinding.ActivityDriversBinding
 import viewmodel.RaceViewModel
 
-class DriversActivity : AppCompatActivity() {
+class DriversActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDriversBinding
     private val vm: RaceViewModel by viewModels()

@@ -9,7 +9,7 @@ import model.Driver
 
 @Dao
 interface DriverDao {
-    @Query("SELECT * FROM drivers_table ORDER BY name ASC")
+    @Query("SELECT * FROM drivers_table ORDER BY points DESC") // ✅ CAMBIADO
     fun getAllDrivers(): LiveData<List<Driver>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

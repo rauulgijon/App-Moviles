@@ -27,6 +27,9 @@ class DriverAdapter : ListAdapter<Driver, DriverAdapter.DriverViewHolder>(Driver
             b.txtTeam.text = driver.teamName
             b.txtNumber.text = driver.number.toString()
             Utils.loadImageInto(driver.imageUrl, b.imgDriver, b.root.context)
+
+            // ✅ LÍNEA AÑADIDA (Formatea los puntos)
+            b.txtPoints.text = "${driver.points} PTS"
         }
     }
 

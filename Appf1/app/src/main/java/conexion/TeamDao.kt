@@ -9,7 +9,7 @@ import model.Team
 
 @Dao
 interface TeamDao {
-    @Query("SELECT * FROM teams_table ORDER BY name ASC")
+    @Query("SELECT * FROM teams_table ORDER BY points DESC") // ✅ CAMBIADO
     fun getAllTeams(): LiveData<List<Team>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

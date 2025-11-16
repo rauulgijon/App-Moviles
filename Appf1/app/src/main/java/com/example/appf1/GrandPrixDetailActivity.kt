@@ -7,13 +7,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.appf1.BaseActivity
 import com.example.appf1.R
 // import com.example.appf1.ScheduleActivity // Ya no es necesario si moviste ScheduleActivity a 'activities'
 import com.example.appf1.Utils
 import com.example.appf1.databinding.ActivityGrandPrixDetailBinding
 import viewmodel.RaceViewModel
 
-class GrandPrixDetailActivity : AppCompatActivity() {
+class GrandPrixDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityGrandPrixDetailBinding
     private val vm: RaceViewModel by viewModels()
 
@@ -22,9 +23,10 @@ class GrandPrixDetailActivity : AppCompatActivity() {
         binding = ActivityGrandPrixDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configuración de la Toolbar (sigue siendo necesaria)
         setSupportActionBar(binding.topAppBar)
         binding.topAppBar.setNavigationOnClickListener { finish() }
-        supportActionBar?.title = "Detalles del GP"
+        // ❌ ELIMINAMOS ESTA LÍNEA: supportActionBar?.title = "Detalles del GP"
 
         val raceId = intent.getIntExtra("RACE_ID", -1)
         if (raceId == -1) {
@@ -34,6 +36,9 @@ class GrandPrixDetailActivity : AppCompatActivity() {
 
         vm.getRaceById(raceId).observe(this) { race ->
             if (race == null) return@observe
+
+            // ✅ AÑADIMOS EL TÍTULO A LA BARRA COLAPSABLE
+            binding.collapsingToolbar.title = race.country ?: race.name
 
             binding.txtName.text = race.name
             binding.txtCircuit.text = race.circuit
