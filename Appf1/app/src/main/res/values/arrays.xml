@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="language_entries">
-        <item>@string/lang_system</item>
-        <item>Español</item>
+        <item>@string/lang_system</item> <item>Español</item>
         <item>English</item>
     </string-array>
 

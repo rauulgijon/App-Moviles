@@ -7,21 +7,23 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.example.appf1.BaseActivity // ✅ IMPORTANTE: Hereda de BaseActivity
+import com.example.appf1.BaseActivity // Heredamos de BaseActivity
 import com.example.appf1.R
 import com.example.appf1.Utils
 import com.example.appf1.databinding.ActivityFantasyBinding
 import model.Driver
 import viewmodel.RaceViewModel
 
-// ✅ CAMBIO DE HERENCIA
+// Heredamos de BaseActivity para que el selector de idioma funcione
 class FantasyActivity : BaseActivity() {
 
     private lateinit var binding: ActivityFantasyBinding
+    // ViewModel para acceder a los pilotos
     private val vm: RaceViewModel by viewModels()
 
-    // Lista para guardar los pilotos COMPLETOS, no solo los nombres
+    // Lista para guardar los objetos Driver COMPLETOS
     private var driverList = listOf<Driver>()
+    // Lista para guardar SÓLO los nombres (para el Spinner)
     private var driverNames = listOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,55 +34,63 @@ class FantasyActivity : BaseActivity() {
         setSupportActionBar(binding.topAppBar)
         binding.topAppBar.setNavigationOnClickListener { finish() }
 
-        // --- ✅ CARGA DE DATOS DESDE EL VIEWMODEL ---
+        // --- Carga de datos desde el ViewModel ---
 
-        // 1. Creamos un Adapter vacío
+        // 1. Creamos un Adapter vacío para el Spinner
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, mutableListOf<String>())
         binding.spinnerDriver.adapter = spinnerAdapter
 
-        // 2. Observamos los pilotos de la BBDD
+        // 2. Observamos los pilotos de la BBDD (ya vienen ordenados por puntos)
         vm.allDrivers.observe(this) { drivers ->
             // 3. Cuando los pilotos llegan, los procesamos
             if (drivers.isNotEmpty()) {
-                driverList = drivers // Guardamos la lista completa
-                driverNames = drivers.map { it.name } // Guardamos solo los nombres
+                driverList = drivers // Guardamos la lista completa de objetos Driver
+                // Creamos una lista de Nombres + Puntos (ej: "Max Verstappen (430 PTS)")
+                driverNames = drivers.map { "${it.name} (${it.points} PTS)" }
 
                 // Limpiamos el adapter y añadimos los nuevos nombres
                 spinnerAdapter.clear()
                 spinnerAdapter.addAll(driverNames)
                 spinnerAdapter.notifyDataSetChanged()
 
-                // Cargamos la imagen del primer piloto por defecto
+                // Cargamos la imagen del primer piloto (el 1º en la clasificación) por defecto
                 Utils.loadImageInto(driverList[0].imageUrl, binding.imgDriverFantasy, this)
             }
         }
 
-        // --- ✅ LÓGICA DEL SPINNER PARA CAMBIAR IMAGEN ---
+        // --- Lógica del Spinner para cambiar la imagen ---
         binding.spinnerDriver.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Cuando el usuario selecciona un item (ej: en la posición 3)...
                 if (driverList.isNotEmpty()) {
+                    // Obtenemos el objeto Driver de esa posición
                     val selectedDriver = driverList[position]
+                    // Usamos Utils para cargar la foto de ese piloto en el ImageView
                     Utils.loadImageInto(selectedDriver.imageUrl, binding.imgDriverFantasy, this@FantasyActivity)
                 }
             }
+            // Si no hay nada seleccionado (raro, pero hay que ponerlo)
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 binding.imgDriverFantasy.setImageResource(R.drawable.ic_baseline_sports_motorsports_24)
             }
         }
 
 
-        // --- Lógica del botón (sin cambios) ---
+        // --- Lógica del botón de Guardar Predicción ---
         binding.btnPredict.setOnClickListener {
-            if (driverNames.isNotEmpty()) {
-                val driver = binding.spinnerDriver.selectedItem as String
+            if (driverList.isNotEmpty()) {
+                // Obtenemos el nombre real del piloto (sin los puntos)
+                val driverName = driverList[binding.spinnerDriver.selectedItemPosition].name
+                // Obtenemos el valor del SeekBar
                 val points = binding.seekBarPoints.progress
 
-                Toast.makeText(this, getString(R.string.fantasy_saved, driver, points), Toast.LENGTH_SHORT).show()
+                // Mostramos un Toast con la confirmación (usando el string de strings.xml)
+                Toast.makeText(this, getString(R.string.fantasy_saved, driverName, points), Toast.LENGTH_SHORT).show()
             }
         }
 
-        // --- LÓGICA DEL MENÚ (sin cambios) ---
-        binding.bottomNav.selectedItemId = R.id.nav_fantasy
+        // --- LÓGICA DEL MENÚ INFERIOR ---
+        binding.bottomNav.selectedItemId = R.id.nav_fantasy // Marcar "Fantasy"
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {

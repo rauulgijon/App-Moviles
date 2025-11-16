@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.appf1.BaseActivity
+import com.example.appf1.BaseActivity // Heredamos de BaseActivity
 import com.example.appf1.R
-// import com.example.appf1.ScheduleActivity // Ya no es necesario si moviste ScheduleActivity a 'activities'
 import com.example.appf1.adapter.DriverAdapter
 import com.example.appf1.adapter.RaceAdapter
 import com.example.appf1.adapter.TeamAdapter
@@ -16,15 +14,19 @@ import com.example.appf1.databinding.ActivityResultsBinding
 import com.google.android.material.tabs.TabLayout
 import viewmodel.RaceViewModel
 
+// Heredamos de BaseActivity para que el selector de idioma funcione
 class ResultsActivity : BaseActivity() {
 
+    // ViewBinding para las vistas
     private lateinit var binding: ActivityResultsBinding
+    // ViewModel para los datos
     private val vm: RaceViewModel by viewModels()
 
-    // Creamos los 3 adaptadores
+    // Creamos una instancia de cada adaptador para los RecyclerViews
+    // Para RaceAdapter, le pasamos una "lambda" (función) que se ejecutará al pulsar un ítem
     private val raceAdapter = RaceAdapter { race ->
         val i = Intent(this, GrandPrixDetailActivity::class.java)
-        i.putExtra("RACE_ID", race.id)
+        i.putExtra("RACE_ID", race.id) // Pasamos el ID a la pantalla de detalle
         startActivity(i)
     }
     private val driverAdapter = DriverAdapter()
@@ -34,7 +36,7 @@ class ResultsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityResultsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.topAppBar)
+        setSupportActionBar(binding.topAppBar) // Toolbar simple (sin flecha de volver)
 
         // 1. Configurar los 3 RecyclerViews
         setupRecyclerViews()
@@ -75,6 +77,9 @@ class ResultsActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Asigna a cada RecyclerView su LayoutManager (vertical) y su Adaptador.
+     */
     private fun setupRecyclerViews() {
         // Configurar RecyclerView de Carreras
         binding.recyclerRaces.layoutManager = LinearLayoutManager(this)
@@ -89,23 +94,34 @@ class ResultsActivity : BaseActivity() {
         binding.recyclerTeams.adapter = teamAdapter
     }
 
+    /**
+     * Se suscribe a los LiveData del ViewModel.
+     * Cuando los datos cambien en la BD, este código se ejecutará.
+     */
     private fun observeViewModel() {
-        // Observar Carreras (solo las que tienen ganador)
+        // Observar Carreras
         vm.allRaces.observe(this) { races ->
+            // Filtramos la lista: solo queremos carreras que SÍ tengan un ganador (!= null)
             raceAdapter.submitList(races.filter { !it.winner.isNullOrEmpty() })
         }
 
         // Observar Pilotos
         vm.allDrivers.observe(this) { drivers ->
+            // Le pasamos la lista completa (ya viene ordenada por puntos desde el DAO)
             driverAdapter.submitList(drivers)
         }
 
         // Observar Equipos
         vm.allTeams.observe(this) { teams ->
+            // Le pasamos la lista completa (ordenada por puntos desde el DAO)
             teamAdapter.submitList(teams)
         }
     }
 
+    /**
+     * Añade las pestañas (Carreras, Pilotos, Equipos) y
+     * define la lógica para mostrar/ocultar los RecyclerViews correctos.
+     */
     private fun setupTabs() {
         // Añadir las pestañas manualmente
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Carreras"))
@@ -116,17 +132,17 @@ class ResultsActivity : BaseActivity() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
-                    0 -> { // Carreras
+                    0 -> { // Pestaña "Carreras"
                         binding.recyclerRaces.visibility = View.VISIBLE
                         binding.recyclerDrivers.visibility = View.GONE
                         binding.recyclerTeams.visibility = View.GONE
                     }
-                    1 -> { // Pilotos
+                    1 -> { // Pestaña "Pilotos"
                         binding.recyclerRaces.visibility = View.GONE
                         binding.recyclerDrivers.visibility = View.VISIBLE
                         binding.recyclerTeams.visibility = View.GONE
                     }
-                    2 -> { // Equipos
+                    2 -> { // Pestaña "Equipos"
                         binding.recyclerRaces.visibility = View.GONE
                         binding.recyclerDrivers.visibility = View.GONE
                         binding.recyclerTeams.visibility = View.VISIBLE

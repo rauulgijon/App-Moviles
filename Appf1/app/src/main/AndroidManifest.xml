@@ -52,7 +52,6 @@
         <activity
             android:name=".activities.ScheduleActivity"
             android:exported="false" />
-
         <activity
             android:name=".activities.DriversActivity"
             android:exported="false"

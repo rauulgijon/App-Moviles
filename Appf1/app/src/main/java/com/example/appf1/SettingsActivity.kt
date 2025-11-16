@@ -13,7 +13,6 @@ import com.example.appf1.BaseActivity // ✅ IMPORTANTE: Hereda de BaseActivity
 import com.example.appf1.R
 import com.example.appf1.databinding.ActivitySettingsBinding
 
-// ✅ CAMBIO DE HERENCIA
 class SettingsActivity : BaseActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var prefs: SharedPreferences
@@ -28,17 +27,14 @@ class SettingsActivity : BaseActivity() {
 
         prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
 
-        // Configurar Notificaciones
         binding.switchNotifications.isChecked = prefs.getBoolean("notifications", true)
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean("notifications", isChecked).apply()
             Toast.makeText(this, getString(R.string.notifications_changed, isChecked.toString()), Toast.LENGTH_SHORT).show()
         }
 
-        // --- ✅ LÓGICA DE IDIOMA MEJORADA ---
         setupLanguageSpinner()
 
-        // Configurar Nickname
         binding.btnAbout.setOnClickListener { startActivity(Intent(this, AboutActivity::class.java)) }
         binding.etNickname.setText(prefs.getString("nickname", "")) // Cargar apodo guardado
         binding.btnSaveNickname.setOnClickListener {
@@ -47,7 +43,6 @@ class SettingsActivity : BaseActivity() {
             Toast.makeText(this, getString(R.string.nickname_saved, nick), Toast.LENGTH_SHORT).show()
         }
 
-        // --- Lógica de Botones (sin cambios) ---
         binding.btnViewDrivers.setOnClickListener {
             startActivity(Intent(this, DriversActivity::class.java))
         }
@@ -55,7 +50,6 @@ class SettingsActivity : BaseActivity() {
             startActivity(Intent(this, TeamsActivity::class.java))
         }
 
-        // --- LÓGICA DEL MENÚ (sin cambios) ---
         binding.bottomNav.selectedItemId = R.id.nav_settings
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -79,20 +73,18 @@ class SettingsActivity : BaseActivity() {
                     finish()
                     true
                 }
-                R.id.nav_settings -> true // Ya estamos aquí
+                R.id.nav_settings -> true
                 else -> false
             }
         }
     }
 
     private fun setupLanguageSpinner() {
-        // Usamos el array de "entries" para lo que ve el usuario
         val adapter = ArrayAdapter.createFromResource(
             this, R.array.language_entries, android.R.layout.simple_spinner_dropdown_item
         )
         binding.spinnerLanguage.adapter = adapter
 
-        // Seleccionamos el item guardado
         val currentLang = prefs.getString("language", "system") ?: "system"
         val currentLangIndex = langValues.indexOf(currentLang)
         if (currentLangIndex != -1) {
@@ -101,21 +93,17 @@ class SettingsActivity : BaseActivity() {
 
         binding.spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Usamos el array de "values" (es, en, system) para guardarlo
                 val selectedLang = langValues[position]
 
-                // Si el idioma seleccionado es diferente al guardado, lo aplicamos
                 if (selectedLang != prefs.getString("language", "system")) {
                     prefs.edit().putString("language", selectedLang).apply()
 
-                    // Aplicar el cambio de idioma
                     val appLocale = if (selectedLang == "system") {
                         LocaleListCompat.getEmptyLocaleList()
                     } else {
                         LocaleListCompat.forLanguageTags(selectedLang)
                     }
                     AppCompatDelegate.setApplicationLocales(appLocale)
-                    // Esto reiniciará la Activity actual con el nuevo idioma
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
