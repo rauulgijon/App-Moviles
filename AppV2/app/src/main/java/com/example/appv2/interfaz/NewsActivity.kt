@@ -28,11 +28,13 @@ import coil.request.ImageRequest
 import com.example.appv2.model.News
 import com.example.appv2.viewmodel.NewsViewModel
 
+// Mantenemos la Activity por si quieres abrirla desde fuera, pero no es obligatoria
 class NewsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
+                // Aquí sí pasamos el botón de volver porque es una activity separada
                 NewsScreen(onBack = { finish() })
             }
         }
@@ -43,33 +45,41 @@ class NewsActivity : ComponentActivity() {
 @Composable
 fun NewsScreen(
     viewModel: NewsViewModel = viewModel(),
-    onBack: () -> Unit
+    onBack: (() -> Unit)? = null // Hacemos el onBack opcional (nullable)
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("F1 News 24/7") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-                    }
-                }
-            )
-        }
-    ) { padding ->
-        if (viewModel.isLoading) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+    // Si estamos en el Home (onBack es null), no mostramos Scaffold con flecha
+    // Si es Activity (onBack existe), mostramos la barra superior
+    if (onBack != null) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Noticias F1") },
+                    navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, null) } }
+                )
             }
-        } else {
-            LazyColumn(
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(padding)
-            ) {
-                items(viewModel.newsList) { news ->
-                    NewsItem(news)
-                }
+        ) { padding ->
+            NewsContent(viewModel, padding)
+        }
+    } else {
+        // Modo "Pestaña del Home" (Sin top bar propia)
+        NewsContent(viewModel, PaddingValues(0.dp))
+    }
+}
+
+@Composable
+fun NewsContent(viewModel: NewsViewModel, padding: PaddingValues) {
+    if (viewModel.isLoading) {
+        Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    } else {
+        LazyColumn(
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(padding)
+        ) {
+            items(viewModel.newsList) { news ->
+                NewsItem(news)
             }
         }
     }
@@ -78,62 +88,24 @@ fun NewsScreen(
 @Composable
 fun NewsItem(news: News) {
     val context = LocalContext.current
-
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp)
-            .clickable {
-                // ABRE EL NAVEGADOR EXTERNO (Chrome)
-                try {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(news.url))
-                    context.startActivity(intent)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+        modifier = Modifier.fillMaxWidth().height(200.dp).clickable {
+            try { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(news.url))) }
+            catch (e: Exception) { e.printStackTrace() }
+        }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(news.image)
-                    .crossfade(true)
-                    .build(),
+                model = ImageRequest.Builder(LocalContext.current).data(news.image).crossfade(true).build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
-
-            // Sombra para leer el texto
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Color.Black),
-                            startY = 300f
-                        )
-                    )
-            )
-
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = news.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = news.date,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.LightGray
-                )
+            Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black), startY = 200f)))
+            Column(Modifier.align(Alignment.BottomStart).padding(16.dp)) {
+                Text(news.title, style = MaterialTheme.typography.titleMedium, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(news.date, style = MaterialTheme.typography.bodySmall, color = Color.LightGray)
             }
         }
     }

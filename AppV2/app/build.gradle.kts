@@ -53,7 +53,8 @@ dependencies {
     // --- ESTA ES LA LIBRERÍA QUE TE FALTABA ---
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     // ------------------------------------------
-
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     // COIL: Para carga de imágenes asíncrona desde URL
     implementation("io.coil-kt:coil-compose:2.6.0")
     // Supabase

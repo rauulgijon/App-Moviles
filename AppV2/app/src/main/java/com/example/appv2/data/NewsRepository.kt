@@ -9,9 +9,7 @@ class NewsRepository {
     suspend fun getNews(): List<News> {
         return try {
             SupabaseClient.client.from("news")
-                .select {
-                    order("id", Order.DESCENDING)
-                }
+                .select { order("id", Order.DESCENDING) }
                 .decodeList<News>()
         } catch (e: Exception) {
             Log.e("NewsRepo", "Error: ${e.message}")

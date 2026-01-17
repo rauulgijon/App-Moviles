@@ -30,15 +30,15 @@
             android:exported="false" />
 
         <activity
+            android:name=".interfaz.NewsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".interfaz.SettingsActivity"
             android:exported="false" />
 
         <activity
             android:name=".interfaz.AboutActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".interfaz.NewsActivity"
             android:exported="false" />
 
     </application>

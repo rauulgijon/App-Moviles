@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel : ViewModel() {
     private val repository = NewsRepository()
-
     var newsList by mutableStateOf<List<News>>(emptyList()); private set
     var isLoading by mutableStateOf(false); private set
 

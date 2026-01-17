@@ -26,43 +26,75 @@ fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-            IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Volver") }
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+            }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(driver.image).crossfade(true).build(),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(driver.image)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(200.dp).clip(CircleShape).background(Color.LightGray)
+            modifier = Modifier
+                .size(200.dp)
+                .clip(CircleShape)
+                .background(Color.LightGray)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = "${driver.firstname} ${driver.lastname}", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-        Text(text = driver.country ?: "", style = MaterialTheme.typography.titleMedium, color = Color.Gray)
+
+        Text(
+            text = "${driver.firstname} ${driver.lastname}",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = driver.country ?: "",
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.Gray
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             StatCard("Número", "#${driver.number}")
             StatCard("Puntos", "${driver.points}")
             StatCard("Mundiales", "${driver.worldChampionships}")
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-        Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(text = "Escudería Actual", style = MaterialTheme.typography.labelMedium)
-                Text(text = driver.team ?: "Sin contrato", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = driver.team ?: "Sin contrato",
+                    style = MaterialTheme.typography.titleLarge
+                )
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // BOTÓN WIKI (Navegador Externo)
+        // Botón para ir a Wikipedia
         Button(
             onClick = {
                 val wikiUrl = "https://es.wikipedia.org/wiki/${driver.firstname}_${driver.lastname}"
@@ -78,8 +110,14 @@ fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
 
 @Composable
 fun StatCard(label: String, value: String) {
-    Card(elevation = CardDefaults.cardElevation(2.dp), modifier = Modifier.width(100.dp)) {
-        Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Card(
+        elevation = CardDefaults.cardElevation(2.dp),
+        modifier = Modifier.width(100.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(text = label, style = MaterialTheme.typography.labelSmall)
             Text(text = value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         }
