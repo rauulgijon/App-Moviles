@@ -13,17 +13,31 @@ import kotlinx.coroutines.launch
 class RaceViewModel : ViewModel() {
     private val repository = RaceRepository()
 
-    var races by mutableStateOf<List<Race>>(emptyList()); private set
-    var isLoading by mutableStateOf(false); private set
+    // Lista de todas las carreras
+    var races by mutableStateOf<List<Race>>(emptyList())
+        private set
 
-    // Estados para el detalle
-    var selectedRace by mutableStateOf<Race?>(null); private set
-    var raceResults by mutableStateOf<List<RaceResult>>(emptyList()); private set
-    var isResultsLoading by mutableStateOf(false); private set
+    // Estado de carga general
+    var isLoading by mutableStateOf(true)
+        private set
 
-    init { fetchRaces() }
+    // Carrera seleccionada (si es null, estamos en la lista; si tiene valor, estamos en detalles)
+    var selectedRace by mutableStateOf<Race?>(null)
+        private set
 
-    fun fetchRaces() {
+    // Resultados de la carrera seleccionada
+    var raceResults by mutableStateOf<List<RaceResult>>(emptyList())
+        private set
+
+    // Estado de carga específico para los detalles
+    var isResultsLoading by mutableStateOf(false)
+        private set
+
+    init {
+        fetchRaces()
+    }
+
+    private fun fetchRaces() {
         viewModelScope.launch {
             isLoading = true
             races = repository.getRaces()
@@ -31,21 +45,26 @@ class RaceViewModel : ViewModel() {
         }
     }
 
+    // Función que se llama al hacer clic en una tarjeta de carrera
     fun onRaceClicked(race: Race) {
         selectedRace = race
-        fetchResults(race.id)
+        fetchResultsForRace(race.id)
     }
 
-    fun onBackToCalendar() {
-        selectedRace = null
-        raceResults = emptyList()
-    }
-
-    private fun fetchResults(raceId: Int) {
+    // Pide los resultados al repositorio
+    private fun fetchResultsForRace(raceId: Int) {
         viewModelScope.launch {
             isResultsLoading = true
+            // Limpiamos resultados anteriores para que no se vean datos viejos mientras carga
+            raceResults = emptyList()
             raceResults = repository.getRaceResults(raceId)
             isResultsLoading = false
         }
+    }
+
+    // Función para volver atrás (limpia la selección)
+    fun onBackToCalendar() {
+        selectedRace = null
+        raceResults = emptyList()
     }
 }

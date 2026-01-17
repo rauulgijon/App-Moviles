@@ -1,3 +1,40 @@
 <resources>
-    <string name="app_name">AppV2</string>
+    <string name="app_name">F1 Ultimate V2</string>
+
+    <string name="menu_news">Noticias</string>
+    <string name="menu_races">Carreras</string>
+    <string name="menu_drivers">Pilotos</string>
+    <string name="menu_teams">Equipos</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_about">Acerca de</string>
+    <string name="menu_profile">Perfil</string>
+
+    <string name="news_title">F1 News</string>
+    <string name="news_read_more">Leer más</string>
+    <string name="news_date">Fecha: </string>
+
+    <string name="race_title">Calendario 2024</string>
+    <string name="race_round">Ronda</string>
+    <string name="race_results">Resultados</string>
+    <string name="race_map_unavailable">Mapa no disponible</string>
+    <string name="race_no_results">No hay resultados disponibles todavía.</string>
+    <string name="race_track_layout">Trazado del Circuito</string>
+
+    <string name="drivers_title">Parrilla 2024</string>
+    <string name="driver_team">Equipo: </string>
+    <string name="driver_points">Puntos: </string>
+
+    <string name="settings_title">Configuración</string>
+    <string name="settings_notifications">Notificaciones</string>
+    <string name="settings_dark_mode">Modo Oscuro</string>
+    <string name="settings_language">Idioma (Automático)</string>
+
+    <string name="about_title">Acerca de</string>
+    <string name="about_description">F1 Ultimate App es tu fuente definitiva para seguir la temporada 2024. Desarrollada como proyecto final de Android.</string>
+    <string name="about_version">Versión 2.0</string>
+    <string name="about_developer">Desarrollado por: </string>
+
+    <string name="loading">Cargando...</string>
+    <string name="error_generic">Ha ocurrido un error</string>
+    <string name="btn_back">Volver</string>
 </resources>
