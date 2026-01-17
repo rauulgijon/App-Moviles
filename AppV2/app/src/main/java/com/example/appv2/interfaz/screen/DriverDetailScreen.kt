@@ -1,5 +1,7 @@
 package com.example.appv2.interfaz.screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +23,8 @@ import com.example.appv2.model.Driver
 
 @Composable
 fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -29,27 +33,45 @@ fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
             IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Volver") }
         }
         Spacer(modifier = Modifier.height(16.dp))
+
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).data(driver.image).crossfade(true).build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(200.dp).clip(CircleShape).background(Color.LightGray)
         )
+
         Spacer(modifier = Modifier.height(24.dp))
         Text(text = "${driver.firstname} ${driver.lastname}", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Text(text = driver.country ?: "", style = MaterialTheme.typography.titleMedium, color = Color.Gray)
+
         Spacer(modifier = Modifier.height(24.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             StatCard("Número", "#${driver.number}")
             StatCard("Puntos", "${driver.points}")
             StatCard("Mundiales", "${driver.worldChampionships}")
         }
+
         Spacer(modifier = Modifier.height(24.dp))
         Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(text = "Escudería Actual", style = MaterialTheme.typography.labelMedium)
                 Text(text = driver.team ?: "Sin contrato", style = MaterialTheme.typography.titleLarge)
             }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // BOTÓN WIKI (Navegador Externo)
+        Button(
+            onClick = {
+                val wikiUrl = "https://es.wikipedia.org/wiki/${driver.firstname}_${driver.lastname}"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wikiUrl))
+                context.startActivity(intent)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Ver Biografía en Wikipedia")
         }
     }
 }
