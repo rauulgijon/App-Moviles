@@ -12,24 +12,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.appv2.data.UserPreferences
+import com.example.appv2.ui.theme.AppV2Theme
 import kotlinx.coroutines.launch
 
 class SettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val userPreferences = UserPreferences(this)
+
         setContent {
-            MaterialTheme {
+            AppV2Theme {
                 SettingsScreen(userPreferences) { finish() }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class) // <--- ESTO ES IMPORTANTE
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(userPreferences: UserPreferences, onBack: () -> Unit) {
-    // Leemos los valores del DataStore como estado
     val notif by userPreferences.getNotifications.collectAsState(initial = true)
     val dark by userPreferences.getDarkMode.collectAsState(initial = false)
     val scope = rememberCoroutineScope()
@@ -37,50 +38,26 @@ fun SettingsScreen(userPreferences: UserPreferences, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Ajustes") },
+                title = { Text("Configuración") },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null)
-                    }
+                    IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, null) }
                 }
             )
         }
     ) { padding ->
         Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(16.dp)
+            modifier = Modifier.padding(padding).padding(16.dp)
         ) {
-            // Switch Notificaciones
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Recibir notificaciones")
-                Switch(
-                    checked = notif,
-                    onCheckedChange = { isChecked ->
-                        scope.launch { userPreferences.saveNotifications(isChecked) }
-                    }
-                )
+            Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
+                Text("Notificaciones", style = MaterialTheme.typography.bodyLarge)
+                Switch(checked = notif, onCheckedChange = { scope.launch { userPreferences.saveNotifications(it) } })
             }
 
-            Divider(modifier = Modifier.padding(vertical = 16.dp))
+            Divider(Modifier.padding(vertical = 16.dp))
 
-            // Switch Modo Oscuro
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Modo Oscuro")
-                Switch(
-                    checked = dark,
-                    onCheckedChange = { isChecked ->
-                        scope.launch { userPreferences.saveDarkMode(isChecked) }
-                    }
-                )
+            Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
+                Text("Forzar Modo Oscuro", style = MaterialTheme.typography.bodyLarge)
+                Switch(checked = dark, onCheckedChange = { scope.launch { userPreferences.saveDarkMode(it) } })
             }
         }
     }

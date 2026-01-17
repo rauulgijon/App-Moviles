@@ -63,12 +63,14 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:storage-kt")
     implementation("io.github.jan-tennert.supabase:auth-kt")
 
+    implementation("androidx.compose.material:material-icons-extended")
     // Ktor
     implementation("io.ktor:ktor-client-android:3.0.0")
     implementation("io.ktor:ktor-client-core:3.0.0")
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation(libs.cronet.embedded)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
