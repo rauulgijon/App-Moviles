@@ -6,8 +6,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RaceResult(
     val id: Int,
-    @SerialName("driver_name") val driverName: String,
     val position: Int,
-    val team: String,
-    val time: String
+    val points: Int,
+    @SerialName("time_difference")
+    val timeDifference: String? = null,
+    // Objeto anidado: Supabase nos rellenará esto con los datos del piloto automáticamente
+    val driver: Driver? = null
 )

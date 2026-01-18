@@ -9,9 +9,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource // IMPORTANTE
 import androidx.compose.ui.text.style.TextOverflow
+import com.example.appv2.R // IMPORTANTE: Asegúrate de importar tu R
 import com.example.appv2.interfaz.AboutActivity
-import com.example.appv2.interfaz.NewsScreen // Importamos la pantalla de noticias
+import com.example.appv2.interfaz.screen.NewsScreen
 import com.example.appv2.interfaz.SettingsActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,12 +29,13 @@ fun HomeScreen() {
             TopAppBar(
                 title = {
                     Text(
+                        // Usamos stringResource para traducir el título
                         text = when(selectedTab) {
-                            0 -> "Calendario 2024"
-                            1 -> "Pilotos"
-                            2 -> "Constructores"
-                            3 -> "Últimas Noticias"
-                            else -> "Mi Perfil"
+                            0 -> stringResource(R.string.race_title) // Calendario 2024
+                            1 -> stringResource(R.string.menu_drivers) // Pilotos
+                            2 -> stringResource(R.string.menu_teams)   // Equipos
+                            3 -> stringResource(R.string.news_title)   // F1 News
+                            else -> stringResource(R.string.menu_profile) // Perfil
                         },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -41,9 +44,8 @@ fun HomeScreen() {
                 actions = {
                     IconButton(onClick = { showMenu = true }) { Icon(Icons.Default.MoreVert, "Menu") }
                     DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                        // El menú superior queda solo para "Acerca de", ya que ajustes está en perfil
                         DropdownMenuItem(
-                            text = { Text("Acerca de") },
+                            text = { Text(stringResource(R.string.menu_about)) }, // Acerca de
                             onClick = { showMenu = false; context.startActivity(Intent(context, AboutActivity::class.java)) }
                         )
                     }
@@ -57,35 +59,35 @@ fun HomeScreen() {
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
                     icon = { Icon(Icons.Default.DateRange, null) },
-                    label = { Text("Carreras") }
+                    label = { Text(stringResource(R.string.menu_races)) }
                 )
                 // 2. PILOTOS
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
                     icon = { Icon(Icons.Default.Person, null) },
-                    label = { Text("Pilotos") }
+                    label = { Text(stringResource(R.string.menu_drivers)) }
                 )
                 // 3. EQUIPOS
                 NavigationBarItem(
                     selected = selectedTab == 2,
                     onClick = { selectedTab = 2 },
-                    icon = { Icon(Icons.Default.Home, null) }, // O Icons.Default.Build
-                    label = { Text("Equipos") }
+                    icon = { Icon(Icons.Default.Home, null) },
+                    label = { Text(stringResource(R.string.menu_teams)) }
                 )
-                // 4. NOTICIAS (Nuevo)
+                // 4. NOTICIAS
                 NavigationBarItem(
                     selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
-                    icon = { Icon(Icons.Default.List, null) }, // O Icons.Default.Email
-                    label = { Text("Noticias") }
+                    icon = { Icon(Icons.Default.List, null) },
+                    label = { Text(stringResource(R.string.menu_news)) }
                 )
-                // 5. PERFIL (Nuevo)
+                // 5. PERFIL
                 NavigationBarItem(
                     selected = selectedTab == 4,
                     onClick = { selectedTab = 4 },
                     icon = { Icon(Icons.Default.AccountCircle, null) },
-                    label = { Text("Perfil") }
+                    label = { Text(stringResource(R.string.menu_profile)) }
                 )
             }
         }
@@ -95,8 +97,8 @@ fun HomeScreen() {
                 0 -> RaceScreen()
                 1 -> DriverScreen()
                 2 -> TeamScreen()
-                3 -> NewsScreen(onBack = null) // Llamamos a Noticias sin botón de volver
-                4 -> ProfileScreen()           // Llamamos a Perfil
+                3 -> NewsScreen(onBack = null)
+                4 -> ProfileScreen()
             }
         }
     }

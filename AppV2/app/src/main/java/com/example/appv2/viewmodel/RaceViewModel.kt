@@ -1,35 +1,28 @@
 package com.example.appv2.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appv2.data.RaceRepository
 import com.example.appv2.model.Race
 import com.example.appv2.model.RaceResult
 import kotlinx.coroutines.launch
 
-class RaceViewModel : ViewModel() {
-    private val repository = RaceRepository()
-
-    // Lista de todas las carreras
+class RaceViewModel(application: Application) : AndroidViewModel(application) {
     var races by mutableStateOf<List<Race>>(emptyList())
         private set
-
-    // Estado de carga general
-    var isLoading by mutableStateOf(true)
+    var isLoading by mutableStateOf(false)
         private set
 
-    // Carrera seleccionada (si es null, estamos en la lista; si tiene valor, estamos en detalles)
     var selectedRace by mutableStateOf<Race?>(null)
         private set
 
-    // Resultados de la carrera seleccionada
+    // NUEVOS ESTADOS PARA RESULTADOS
     var raceResults by mutableStateOf<List<RaceResult>>(emptyList())
         private set
-
-    // Estado de carga específico para los detalles
     var isResultsLoading by mutableStateOf(false)
         private set
 
@@ -40,31 +33,27 @@ class RaceViewModel : ViewModel() {
     private fun fetchRaces() {
         viewModelScope.launch {
             isLoading = true
-            races = repository.getRaces()
+            races = RaceRepository.getRaces()
             isLoading = false
         }
     }
 
-    // Función que se llama al hacer clic en una tarjeta de carrera
+    // Al hacer click, guardamos la carrera Y cargamos sus resultados
     fun onRaceClicked(race: Race) {
         selectedRace = race
-        fetchResultsForRace(race.id)
+        loadRaceResults(race.id)
     }
 
-    // Pide los resultados al repositorio
-    private fun fetchResultsForRace(raceId: Int) {
-        viewModelScope.launch {
-            isResultsLoading = true
-            // Limpiamos resultados anteriores para que no se vean datos viejos mientras carga
-            raceResults = emptyList()
-            raceResults = repository.getRaceResults(raceId)
-            isResultsLoading = false
-        }
-    }
-
-    // Función para volver atrás (limpia la selección)
     fun onBackToCalendar() {
         selectedRace = null
-        raceResults = emptyList()
+        raceResults = emptyList() // Limpiamos para que no salga la lista vieja al abrir otra
+    }
+
+    private fun loadRaceResults(raceId: Int) {
+        viewModelScope.launch {
+            isResultsLoading = true
+            raceResults = RaceRepository.getRaceResults(raceId)
+            isResultsLoading = false
+        }
     }
 }

@@ -3,18 +3,16 @@ package com.example.appv2.data
 import android.util.Log
 import com.example.appv2.model.Driver
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.query.Order
 
-class DriverRepository {
+object DriverRepository {
     suspend fun getDrivers(): List<Driver> {
         return try {
-            SupabaseClient.client.from("drivers")
-                .select {
-                    order("points", Order.DESCENDING) // Ordenar por puntos
-                }
+            // Leemos de la VISTA calculada en SQL
+            SupabaseClient.client.from("v_driver_standings")
+                .select()
                 .decodeList<Driver>()
         } catch (e: Exception) {
-            Log.e("DriverRepo", "Error: ${e.message}")
+            Log.e("REPO", "Error drivers: ${e.message}")
             emptyList()
         }
     }

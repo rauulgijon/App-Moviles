@@ -10,7 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource // IMPORTANTE
 import androidx.compose.ui.unit.dp
+import com.example.appv2.R // IMPORTANTE
 import com.example.appv2.data.UserPreferences
 import com.example.appv2.ui.theme.AppV2Theme
 import kotlinx.coroutines.launch
@@ -38,9 +40,9 @@ fun SettingsScreen(userPreferences: UserPreferences, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Configuración") },
+                title = { Text(stringResource(R.string.settings_title)) }, // Configuración
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, null) }
+                    IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, stringResource(R.string.btn_back)) }
                 }
             )
         }
@@ -49,14 +51,14 @@ fun SettingsScreen(userPreferences: UserPreferences, onBack: () -> Unit) {
             modifier = Modifier.padding(padding).padding(16.dp)
         ) {
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                Text("Notificaciones", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.settings_notifications), style = MaterialTheme.typography.bodyLarge)
                 Switch(checked = notif, onCheckedChange = { scope.launch { userPreferences.saveNotifications(it) } })
             }
 
             Divider(Modifier.padding(vertical = 16.dp))
 
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                Text("Forzar Modo Oscuro", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.settings_dark_mode), style = MaterialTheme.typography.bodyLarge)
                 Switch(checked = dark, onCheckedChange = { scope.launch { userPreferences.saveDarkMode(it) } })
             }
         }

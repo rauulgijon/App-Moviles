@@ -7,11 +7,12 @@ import kotlinx.serialization.Serializable
 data class Team(
     val id: Int,
     val name: String,
-    val base: String?,
+    val base: String? = null,
     @SerialName("team_principal")
     val teamPrincipal: String?,
     val logo: String?,
     @SerialName("car_image")
     val carImage: String? = null,
+    @SerialName("total_points") // Mapea la suma de puntos de sus pilotos
     val points: Int? = 0
 )

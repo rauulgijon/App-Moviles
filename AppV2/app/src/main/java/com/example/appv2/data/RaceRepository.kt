@@ -1,44 +1,46 @@
 package com.example.appv2.data
 
+import android.util.Log
 import com.example.appv2.model.Race
 import com.example.appv2.model.RaceResult
 import io.github.jan.supabase.postgrest.from
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
 
-class RaceRepository {
+object RaceRepository {
 
-    // Obtener todas las carreras (para la lista principal)
+    // Función existente para el calendario
     suspend fun getRaces(): List<Race> {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Ordenamos por ronda (round) para que salgan en orden
-                SupabaseClient.client.from("races")
-                    .select().decodeList<Race>()
-                    .sortedBy { it.round }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emptyList()
-            }
+        return try {
+            SupabaseClient.client.from("races")
+                .select {
+                    order(column = "round", order = Order.ASCENDING)
+                }
+                .decodeList<Race>()
+        } catch (e: Exception) {
+            Log.e("RaceRepository", "Error races: ${e.message}")
+            emptyList()
         }
     }
 
-    // Obtener los resultados de UNA carrera específica
+    // NUEVA FUNCIÓN: Obtener resultados + datos del piloto
     suspend fun getRaceResults(raceId: Int): List<RaceResult> {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Filtramos por 'race_id' y ordenamos por 'position'
-                SupabaseClient.client.from("race_results")
-                    .select {
-                        filter {
-                            eq("race_id", raceId)
-                        }
-                    }.decodeList<RaceResult>()
-                    .sortedBy { it.position }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emptyList()
-            }
+        return try {
+            // Pedimos '*, driver:drivers(*)' para que Supabase nos incluya los datos del piloto dentro del resultado
+            val results = SupabaseClient.client.from("race_results")
+                .select(columns = Columns.raw("*, driver:drivers(*)")) {
+                    filter {
+                        eq("race_id", raceId)
+                    }
+                    order("position", order = Order.ASCENDING)
+                }
+                .decodeList<RaceResult>()
+
+            Log.d("RaceRepository", "Resultados cargados: ${results.size}")
+            results
+        } catch (e: Exception) {
+            Log.e("RaceRepository", "Error resultados: ${e.message}")
+            emptyList()
         }
     }
 }

@@ -1,22 +1,19 @@
 package com.example.appv2.interfaz.screen
 
-import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,17 +22,14 @@ import coil.request.ImageRequest
 import com.example.appv2.model.Race
 import com.example.appv2.viewmodel.RaceViewModel
 
+private const val STORAGE_BASE_URL = "https://rqyytwpfcezjtndbjkwj.supabase.co/storage/v1/object/public/images/BBDD%20F1/"
+
 @Composable
 fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
     val selectedRace = viewModel.selectedRace
-    val isLoading = viewModel.isLoading
-
-    BackHandler(enabled = selectedRace != null) {
-        viewModel.onBackToCalendar()
-    }
 
     if (selectedRace != null) {
-        // VISTA DETALLES
+        // Aquí pasamos los 4 parámetros que ahora sí acepta RaceDetailScreen
         RaceDetailScreen(
             race = selectedRace,
             results = viewModel.raceResults,
@@ -43,10 +37,9 @@ fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
             onBack = { viewModel.onBackToCalendar() }
         )
     } else {
-        // VISTA LISTA
-        if (isLoading) {
+        if (viewModel.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                CircularProgressIndicator()
             }
         } else {
             LazyColumn(
@@ -54,10 +47,7 @@ fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(viewModel.races) { race ->
-                    RaceItemEnhanced(
-                        race = race,
-                        onClick = { viewModel.onRaceClicked(race) }
-                    )
+                    RaceItemCard(race, onClick = { viewModel.onRaceClicked(race) })
                 }
             }
         }
@@ -65,88 +55,25 @@ fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
 }
 
 @Composable
-fun RaceItemEnhanced(race: Race, onClick: () -> Unit) {
+fun RaceItemCard(race: Race, onClick: () -> Unit) {
+    val imageUrl = "${STORAGE_BASE_URL}circuitos/${race.circuitImage}"
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // --- COLUMNA IZQUIERDA ---
-            Column(modifier = Modifier.weight(1f)) {
-
-                // Ronda
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "RONDA ${race.round}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(6.dp))
-
-                // CORREGIDO: raceName (antes puse race.name por error)
-                Text(
-                    text = race.raceName,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                // CORREGIDO: circuitName (antes puse race.circuit)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.LocationOn, null, tint = Color.Gray, modifier = Modifier.size(14.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = race.circuitName,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Text(
-                    text = race.date,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("RONDA ${race.round}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                Text(race.raceName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(race.date, style = MaterialTheme.typography.bodySmall)
             }
-
-            // --- COLUMNA DERECHA: IMAGEN ---
-            // CORREGIDO: circuitImage (antes puse race.image)
-            if (race.circuitImage != null) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(race.circuitImage) // <--- Aquí estaba el fallo
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "Track Map",
-                    modifier = Modifier
-                        .size(100.dp)
-                        .padding(start = 16.dp),
-                    contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-                )
-            }
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current).data(imageUrl).build(),
+                contentDescription = null,
+                modifier = Modifier.size(80.dp).background(Color.White, RoundedCornerShape(8.dp)).padding(4.dp),
+                contentScale = ContentScale.Fit,
+                error = painterResource(android.R.drawable.ic_menu_report_image)
+            )
         }
     }
 }

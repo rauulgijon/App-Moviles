@@ -1,27 +1,36 @@
 package com.example.appv2.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appv2.data.TeamRepository
+import com.example.appv2.data.TeamRepository // <--- ASEGÚRATE DE QUE ESTO ESTÉ AQUÍ
 import com.example.appv2.model.Team
 import kotlinx.coroutines.launch
 
-class TeamViewModel : ViewModel() {
-    private val repository = TeamRepository()
+class TeamViewModel(application: Application) : AndroidViewModel(application) {
+    var teams by mutableStateOf<List<Team>>(emptyList())
+        private set
+    var isLoading by mutableStateOf(false)
+        private set
 
-    var teams by mutableStateOf<List<Team>>(emptyList()); private set
-    var isLoading by mutableStateOf(false); private set
+    init {
+        fetchTeams()
+    }
 
-    init { fetchTeams() }
-
-    fun fetchTeams() {
+    private fun fetchTeams() {
         viewModelScope.launch {
             isLoading = true
-            teams = repository.getTeams()
-            isLoading = false
+            try {
+                // Llamamos a la función del repositorio que creamos antes
+                teams = TeamRepository.getTeams()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                isLoading = false
+            }
         }
     }
 }
