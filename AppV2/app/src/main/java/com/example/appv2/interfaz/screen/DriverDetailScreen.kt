@@ -20,40 +20,34 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.appv2.model.Driver
 
-private const val STORAGE_BASE_URL = "https://rqyytwpfcezjtndbjkwj.supabase.co/storage/v1/object/public/images/BBDD%20F1/"
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
-    val imageUrl = "${STORAGE_BASE_URL}pilotos/${driver.image}"
+    val storageUrl = "https://rqyytwpfcezjtndbjkwj.supabase.co/storage/v1/object/public/images/BBDD%20F1/pilotos/"
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("${driver.firstname} ${driver.lastname}") },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
-                    }
+                    IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver") }
                 }
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(Modifier.fillMaxSize().padding(padding).padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(imageUrl).build(),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("${storageUrl}${driver.image}")
+                    .crossfade(true).build(),
                 contentDescription = null,
-                alignment = Alignment.TopCenter,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(200.dp).clip(CircleShape).background(Color.LightGray),
+                contentScale = ContentScale.Crop, // CORRECCIÓN: Foto ajustada
+                modifier = Modifier.size(220.dp).clip(CircleShape).background(Color.LightGray),
                 error = painterResource(android.R.drawable.ic_menu_report_image)
             )
-            Spacer(Modifier.height(20.dp))
-            Text(driver.team ?: "Sin Equipo", style = MaterialTheme.typography.headlineSmall, color = Color.Gray)
-            Text("${driver.points} Puntos", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Black)
+            Spacer(Modifier.height(24.dp))
+            Text(text = driver.team ?: "Sin equipo", style = MaterialTheme.typography.headlineSmall, color = Color.Gray)
+            Text(text = "${driver.points ?: 0} PTS", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.Black)
         }
     }
 }

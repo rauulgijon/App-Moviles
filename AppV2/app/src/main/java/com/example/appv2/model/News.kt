@@ -9,5 +9,5 @@ data class News(
     val content: String,
     val date: String,
     val image: String? = null,
-    val url: String? = null // <-- AÑADIDO
+    val url: String? = null
 )

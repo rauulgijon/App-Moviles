@@ -10,7 +10,6 @@ import com.example.appv2.model.News
 import kotlinx.coroutines.launch
 
 class NewsViewModel : ViewModel() {
-    private val repository = NewsRepository()
     var newsList by mutableStateOf<List<News>>(emptyList()); private set
     var isLoading by mutableStateOf(false); private set
 
@@ -19,7 +18,7 @@ class NewsViewModel : ViewModel() {
     fun fetchNews() {
         viewModelScope.launch {
             isLoading = true
-            newsList = repository.getNews()
+            newsList = NewsRepository.getNews()
             isLoading = false
         }
     }

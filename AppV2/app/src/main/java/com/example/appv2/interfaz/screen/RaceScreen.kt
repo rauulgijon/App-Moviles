@@ -29,7 +29,6 @@ fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
     val selectedRace = viewModel.selectedRace
 
     if (selectedRace != null) {
-        // Aquí pasamos los 4 parámetros que ahora sí acepta RaceDetailScreen
         RaceDetailScreen(
             race = selectedRace,
             results = viewModel.raceResults,
@@ -38,16 +37,11 @@ fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
         )
     } else {
         if (viewModel.isLoading) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         } else {
-            LazyColumn(
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+            LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(viewModel.races) { race ->
-                    RaceItemCard(race, onClick = { viewModel.onRaceClicked(race) })
+                    RaceItem(race = race, onClick = { viewModel.onRaceClicked(race) })
                 }
             }
         }
@@ -55,7 +49,7 @@ fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
 }
 
 @Composable
-fun RaceItemCard(race: Race, onClick: () -> Unit) {
+fun RaceItem(race: Race, onClick: () -> Unit) {
     val imageUrl = "${STORAGE_BASE_URL}circuitos/${race.circuitImage}"
     Card(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
@@ -63,9 +57,9 @@ fun RaceItemCard(race: Race, onClick: () -> Unit) {
     ) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text("RONDA ${race.round}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
-                Text(race.raceName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                Text(race.date, style = MaterialTheme.typography.bodySmall)
+                Text(text = "Ronda ${race.round}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                Text(text = race.raceName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(text = race.date, style = MaterialTheme.typography.bodySmall)
             }
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current).data(imageUrl).build(),
