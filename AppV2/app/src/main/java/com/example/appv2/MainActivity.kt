@@ -3,49 +3,41 @@ package com.example.appv2
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.appv2.interfaz.screen.DriverScreen
-import com.example.appv2.interfaz.screen.NewsScreen
-import com.example.appv2.interfaz.screen.RaceScreen
-import com.example.appv2.interfaz.screen.TeamScreen
-import com.example.appv2.interfaz.screen.ProfileScreen
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.example.appv2.interfaz.screen.*
 import com.example.appv2.ui.theme.AppV2Theme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            AppV2Theme {
-                MainScreen()
-            }
-        }
+        setContent { AppV2Theme { MainScreen() } }
     }
 }
 
-// DEFINICIÓN CORREGIDA DE LA SEALED CLASS
-sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: String) {
-    object News : BottomNavItem("news", Icons.Default.Info, "Noticias")
-    object Drivers : BottomNavItem("drivers", Icons.Default.Person, "Pilotos")
-    object Schedule : BottomNavItem("schedule", Icons.Default.DateRange, "Calendario")
-    object Teams : BottomNavItem("teams", Icons.AutoMirrored.Filled.List, "Equipos")
-    object Profile : BottomNavItem("profile", Icons.Default.AccountCircle, "Perfil") // <-- AÑADIDO AQUÍ
+sealed class BottomNavItem(val route: String, val icon: ImageVector, val labelRes: Int) {
+    object News : BottomNavItem("news", Icons.Default.Info, R.string.menu_news)
+    object Drivers : BottomNavItem("drivers", Icons.Default.Person, R.string.menu_drivers)
+    object Schedule : BottomNavItem("schedule", Icons.Default.DateRange, R.string.menu_races)
+    object Teams : BottomNavItem("teams", Icons.AutoMirrored.Filled.List, R.string.menu_teams)
+    object Profile : BottomNavItem("profile", Icons.Default.AccountCircle, R.string.menu_profile)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     var selectedItem by remember { mutableIntStateOf(0) }
-
-    // LISTA DE ITEMS USANDO LOS OBJETOS DE LA CLASE SELLADA
     val items = listOf(
         BottomNavItem.News,
         BottomNavItem.Drivers,
@@ -55,12 +47,27 @@ fun MainScreen() {
     )
 
     Scaffold(
+        // CABECERA CON LOGO EN TODAS LAS PANTALLAS
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.logof1), // Asegúrate de tener logo_splash en drawable
+                        contentDescription = "F1 Logo",
+                        modifier = Modifier.height(32.dp)
+                    )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
+        },
         bottomBar = {
             NavigationBar {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        icon = { Icon(item.icon, contentDescription = item.label) },
-                        label = { Text(item.label) },
+                        icon = { Icon(item.icon, contentDescription = null) },
+                        label = { Text(stringResource(item.labelRes)) },
                         selected = selectedItem == index,
                         onClick = { selectedItem = index }
                     )

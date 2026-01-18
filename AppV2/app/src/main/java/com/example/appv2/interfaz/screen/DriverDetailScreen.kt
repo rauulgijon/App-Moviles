@@ -55,7 +55,6 @@ fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Contenedor de la foto con el número
             Box(contentAlignment = Alignment.BottomEnd) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -71,7 +70,6 @@ fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
                     error = painterResource(android.R.drawable.ic_menu_report_image)
                 )
 
-                // Círculo con el número del piloto
                 Surface(
                     color = MaterialTheme.colorScheme.primary,
                     shape = CircleShape,
@@ -91,7 +89,6 @@ fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
 
             Spacer(Modifier.height(16.dp))
 
-            // Nombre y Equipo
             Text(
                 text = "${driver.firstname} ${driver.lastname}",
                 style = MaterialTheme.typography.headlineLarge,
@@ -105,18 +102,17 @@ fun DriverDetailScreen(driver: Driver, onBack: () -> Unit) {
 
             Spacer(Modifier.height(24.dp))
 
-            // TARJETA DE ESTADÍSTICAS
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    InfoRow(Icons.Default.EmojiEvents, "Campeonatos Mundiales", "${driver.worldChampionships ?: 0}")
+                    InfoRow(Icons.Default.EmojiEvents, stringResource(R.string.driver_titles), "${driver.worldChampionships ?: 0}")
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray.copy(alpha = 0.5f))
-                    InfoRow(Icons.Default.Language, "Nacionalidad", driver.country ?: "Desconocida")
+                    InfoRow(Icons.Default.Language, stringResource(R.string.driver_nationality), driver.country ?: "Desconocida")
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color.LightGray.copy(alpha = 0.5f))
-                    InfoRow(Icons.Default.Numbers, "Puntos Totales", "${driver.points ?: 0} PTS")
+                    InfoRow(Icons.Default.Numbers, stringResource(R.string.driver_total_points), "${driver.points ?: 0} PTS")
                 }
             }
         }

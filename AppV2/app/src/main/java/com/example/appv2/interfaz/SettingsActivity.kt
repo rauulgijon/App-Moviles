@@ -5,26 +5,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource // IMPORTANTE
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.appv2.R // IMPORTANTE
-import com.example.appv2.data.UserPreferences
+import com.example.appv2.R
+import com.example.appv2.data.UserPreference
 import com.example.appv2.ui.theme.AppV2Theme
 import kotlinx.coroutines.launch
 
 class SettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val userPreferences = UserPreferences(this)
+        val userPrefs = UserPreference(this)
 
         setContent {
             AppV2Theme {
-                SettingsScreen(userPreferences) { finish() }
+                SettingsScreen(userPrefs) { finish() }
             }
         }
     }
@@ -32,35 +32,43 @@ class SettingsActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(userPreferences: UserPreferences, onBack: () -> Unit) {
-    val notif by userPreferences.getNotifications.collectAsState(initial = true)
-    val dark by userPreferences.getDarkMode.collectAsState(initial = false)
+fun SettingsScreen(userPrefs: UserPreference, onBack: () -> Unit) {
+    val notif by userPrefs.notificationsFlow.collectAsState(initial = true)
     val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.settings_title)) }, // Configuración
+                title = { Text(stringResource(R.string.settings_title)) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, stringResource(R.string.btn_back)) }
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                    }
                 }
             )
         }
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding).padding(16.dp)
+            modifier = Modifier
+                .padding(padding)
+                .padding(16.dp)
         ) {
-            Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
+            // Switch de Notificaciones
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(stringResource(R.string.settings_notifications), style = MaterialTheme.typography.bodyLarge)
-                Switch(checked = notif, onCheckedChange = { scope.launch { userPreferences.saveNotifications(it) } })
+                Switch(
+                    checked = notif,
+                    onCheckedChange = { isChecked ->
+                        scope.launch { userPrefs.saveNotifications(isChecked) }
+                    }
+                )
             }
 
-            Divider(Modifier.padding(vertical = 16.dp))
-
-            Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                Text(stringResource(R.string.settings_dark_mode), style = MaterialTheme.typography.bodyLarge)
-                Switch(checked = dark, onCheckedChange = { scope.launch { userPreferences.saveDarkMode(it) } })
-            }
+            // Aquí puedes añadir más ajustes en el futuro si quieres
         }
     }
 }
