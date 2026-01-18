@@ -27,18 +27,29 @@ private const val STORAGE_BASE_URL = "https://rqyytwpfcezjtndbjkwj.supabase.co/s
 
 @Composable
 fun TeamScreen(viewModel: TeamViewModel = viewModel()) {
-    if (viewModel.isLoading) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-    } else {
-        LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            // Los equipos ya vienen ordenados por la suma de puntos de sus pilotos desde SQL
-            itemsIndexed(viewModel.teams) { index, team ->
-                TeamItem(team, index + 1)
+    Column(modifier = Modifier.fillMaxSize()) {
+        // TÍTULO DE SECCIÓN
+        Text(
+            text = "Mundial de Constructores",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Black,
+            modifier = Modifier.padding(16.dp)
+        )
+
+        if (viewModel.isLoading) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                itemsIndexed(viewModel.teams) { index, team ->
+                    TeamItem(team = team, position = index + 1)
+                }
             }
         }
     }
 }
-
 @Composable
 fun TeamItem(team: Team, position: Int) {
     val carUrl = "${STORAGE_BASE_URL}livery/${team.carImage}"

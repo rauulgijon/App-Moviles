@@ -15,11 +15,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.appv2.R
 import com.example.appv2.interfaz.NewsDetailActivity
 import com.example.appv2.viewmodel.NewsViewModel
 
@@ -28,35 +30,58 @@ fun NewsScreen(viewModel: NewsViewModel = viewModel()) {
     val context = LocalContext.current
     val storageUrl = "https://rqyytwpfcezjtndbjkwj.supabase.co/storage/v1/object/public/images/BBDD%20F1/noticias/"
 
-    if (viewModel.isLoading) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-    } else {
-        LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            items(viewModel.newsList) { item ->
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier.fillMaxWidth().height(250.dp).clickable {
-                        val intent = Intent(context, NewsDetailActivity::class.java).apply {
-                            putExtra("title", item.title)
-                            putExtra("content", item.content)
-                            putExtra("image", item.image)
-                        }
-                        context.startActivity(intent)
-                    }
-                ) {
-                    Box {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data("${storageUrl}${item.image}")
-                                .crossfade(true).build(),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop, // CORRECCIÓN: Foto ajustada (RB21 incluido)
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(0.8f)), startY = 300f)))
-                        Column(Modifier.align(Alignment.BottomStart).padding(16.dp)) {
-                            Text(item.title, style = MaterialTheme.typography.titleLarge, color = Color.White, fontWeight = FontWeight.Bold)
-                            Text(item.date, style = MaterialTheme.typography.labelSmall, color = Color.LightGray)
+    Column(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = stringResource(R.string.title_news),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Black,
+            modifier = Modifier.padding(16.dp)
+        )
+
+        if (viewModel.isLoading) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(viewModel.newsList) { item ->
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(250.dp)
+                            .clickable {
+                                val intent = Intent(context, NewsDetailActivity::class.java).apply {
+                                    putExtra("EXTRA_TITLE", item.title)
+                                    putExtra("EXTRA_CONTENT", item.content)
+                                    putExtra("EXTRA_DATE", item.date)
+                                    putExtra("EXTRA_IMAGE", "${storageUrl}${item.image}")
+                                }
+                                context.startActivity(intent)
+                            },
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Box {
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data("${storageUrl}${item.image}")
+                                    .crossfade(true).build(),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                            Box(Modifier.fillMaxSize().background(
+                                Brush.verticalGradient(
+                                    listOf(Color.Transparent, Color.Black.copy(0.8f)),
+                                    startY = 300f
+                                )
+                            ))
+                            Column(Modifier.align(Alignment.BottomStart).padding(16.dp)) {
+                                Text(item.title, style = MaterialTheme.typography.titleLarge, color = Color.White, fontWeight = FontWeight.Bold)
+                                Text(item.date, style = MaterialTheme.typography.labelSmall, color = Color.LightGray)
+                            }
                         }
                     }
                 }

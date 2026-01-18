@@ -36,12 +36,25 @@ fun RaceScreen(viewModel: RaceViewModel = viewModel()) {
             onBack = { viewModel.onBackToCalendar() }
         )
     } else {
-        if (viewModel.isLoading) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        } else {
-            LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                items(viewModel.races) { race ->
-                    RaceItem(race = race, onClick = { viewModel.onRaceClicked(race) })
+        Column(modifier = Modifier.fillMaxSize()) {
+            // TÍTULO DE SECCIÓN
+            Text(
+                text = "Calendario Oficial 2025",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Black,
+                modifier = Modifier.padding(16.dp)
+            )
+
+            if (viewModel.isLoading) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(viewModel.races) { race ->
+                        RaceItem(race = race, onClick = { viewModel.onRaceClicked(race) })
+                    }
                 }
             }
         }

@@ -31,16 +31,25 @@ fun DriverScreen(viewModel: DriverViewModel = viewModel()) {
     if (selectedDriver != null) {
         DriverDetailScreen(driver = selectedDriver, onBack = { viewModel.onDriverSelected(null) })
     } else {
-        if (viewModel.isLoading) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        } else {
-            LazyColumn(
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                // Los pilotos ya vienen ordenados por puntos desde la Vista SQL
-                itemsIndexed(viewModel.drivers) { index, driver ->
-                    DriverItem(driver = driver, position = index + 1, onClick = { viewModel.onDriverSelected(driver) })
+        Column(modifier = Modifier.fillMaxSize()) {
+            // TÍTULO DE SECCIÓN
+            Text(
+                text = "Mundial de Pilotos 2025",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Black,
+                modifier = Modifier.padding(16.dp)
+            )
+
+            if (viewModel.isLoading) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    itemsIndexed(viewModel.drivers) { index, driver ->
+                        DriverItem(driver = driver, position = index + 1, onClick = { viewModel.onDriverSelected(driver) })
+                    }
                 }
             }
         }
