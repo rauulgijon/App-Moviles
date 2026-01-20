@@ -16,6 +16,5 @@ val LightGray = Color(0xFFF2F2F2)
 val TextBlack = Color(0xFF101010)
 val TextWhite = Color(0xFFEEEEEE)
 
-// Colores Específicos (Añadidos para solucionar el error)
 val PureWhite = Color(0xFFFFFFFF)
 val GhostWhite = Color(0xFFF8F8FF)

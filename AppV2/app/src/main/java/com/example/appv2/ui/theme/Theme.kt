@@ -43,7 +43,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun AppV2Theme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Desactivado para mantener identidad F1
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -61,7 +61,6 @@ fun AppV2Theme(
             val window = (view.context as Activity).window
             // Barra de estado roja
             window.statusBarColor = F1Red.toArgb()
-            // Controladores de insets para iconos claros/oscuros
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }

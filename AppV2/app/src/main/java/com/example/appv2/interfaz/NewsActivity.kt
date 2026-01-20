@@ -55,7 +55,7 @@ fun NewsCard(news: News, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
-            .clickable { onClick() }, // <--- AHORA ES CLICKABLE
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -69,7 +69,7 @@ fun NewsCard(news: News, onClick: () -> Unit) {
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Degradado para que el texto blanco se vea perfecto
+            // Degradado para que el texto blanco se vea
             Box(
                 modifier = Modifier
                     .fillMaxSize()

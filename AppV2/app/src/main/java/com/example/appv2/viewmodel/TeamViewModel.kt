@@ -24,7 +24,6 @@ class TeamViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             isLoading = true
             try {
-                // Llamamos a la función del repositorio que creamos antes
                 teams = TeamRepository.getTeams()
             } catch (e: Exception) {
                 e.printStackTrace()

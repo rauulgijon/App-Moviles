@@ -10,6 +10,7 @@ object SupabaseClient {
     private const val SUPABASE_URL = "https://rqyytwpfcezjtndbjkwj.supabase.co"
     private const val SUPABASE_KEY = "sb_publishable_i-8NqtPKNyhcN5uo8UNyYA_T48QpeJ5"
 
+    // Inicializacion del cliente
     val client = createSupabaseClient(
         supabaseUrl = SUPABASE_URL,
         supabaseKey = SUPABASE_KEY
@@ -19,7 +20,7 @@ object SupabaseClient {
             scheme = "app"
             host = "supabase.com"
         }
-        install(Storage)
-        install(Postgrest)
+        install(Storage) // Para gestion de archivos
+        install(Postgrest) // Para consultas
     }
 }

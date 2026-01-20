@@ -14,7 +14,7 @@ class NewsViewModel : ViewModel() {
     var isLoading by mutableStateOf(false); private set
 
     init { fetchNews() }
-
+    // Funcion para obtener noticias
     fun fetchNews() {
         viewModelScope.launch {
             isLoading = true

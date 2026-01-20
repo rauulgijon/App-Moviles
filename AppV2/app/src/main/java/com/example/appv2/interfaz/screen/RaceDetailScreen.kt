@@ -21,7 +21,7 @@ fun RaceDetailScreen(
     race: Race,
     results: List<RaceResult>,
     isLoading: Boolean,
-    onBack: () -> Unit // <--- ESTO ES LO QUE FALTABA
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {

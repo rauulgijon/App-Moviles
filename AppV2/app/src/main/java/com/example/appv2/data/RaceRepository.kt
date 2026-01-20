@@ -9,7 +9,7 @@ import io.github.jan.supabase.postgrest.query.Order
 
 object RaceRepository {
 
-    // Función existente para el calendario
+    // Función para el calendario
     suspend fun getRaces(): List<Race> {
         return try {
             SupabaseClient.client.from("races")
@@ -23,10 +23,9 @@ object RaceRepository {
         }
     }
 
-    // NUEVA FUNCIÓN: Obtener resultados + datos del piloto
+    // Obtenemos resultados + datos del piloto
     suspend fun getRaceResults(raceId: Int): List<RaceResult> {
         return try {
-            // Pedimos '*, driver:drivers(*)' para que Supabase nos incluya los datos del piloto dentro del resultado
             val results = SupabaseClient.client.from("race_results")
                 .select(columns = Columns.raw("*, driver:drivers(*)")) {
                     filter {

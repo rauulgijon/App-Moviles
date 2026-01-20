@@ -5,7 +5,7 @@ import com.example.appv2.model.News
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
 
-object NewsRepository { // Cambiado a object para facilitar el acceso
+object NewsRepository {
     suspend fun getNews(): List<News> {
         return try {
             val response = SupabaseClient.client.from("news")

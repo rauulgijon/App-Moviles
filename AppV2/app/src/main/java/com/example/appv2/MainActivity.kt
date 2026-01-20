@@ -22,10 +22,11 @@ import com.example.appv2.ui.theme.AppV2Theme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Definimos el layout Compose de la activity
         setContent { AppV2Theme { MainScreen() } }
     }
 }
-
+// Clase para gestionar los elementos del menú
 sealed class BottomNavItem(val route: String, val icon: ImageVector, val labelRes: Int) {
     object News : BottomNavItem("news", Icons.Default.Info, R.string.menu_news)
     object Drivers : BottomNavItem("drivers", Icons.Default.Person, R.string.menu_drivers)
@@ -37,6 +38,7 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector, val labelRe
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+    // Estado para controlar el elemento seleccionado en el menú
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf(
         BottomNavItem.News,
@@ -45,10 +47,10 @@ fun MainScreen() {
         BottomNavItem.Teams,
         BottomNavItem.Profile
     )
-
+    // Scaffold para estructura (TopBar, Content, BottomBar)
     Scaffold(
-        // CABECERA CON LOGO EN TODAS LAS PANTALLAS
         topBar = {
+            // Logo centrado arriba
             CenterAlignedTopAppBar(
                 title = {
                     Image(
@@ -63,6 +65,7 @@ fun MainScreen() {
             )
         },
         bottomBar = {
+            // Barra de navegacion abajjo
             NavigationBar {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
@@ -75,6 +78,7 @@ fun MainScreen() {
             }
         }
     ) { paddingValues ->
+        // Content
         Surface(modifier = Modifier.padding(paddingValues)) {
             when (selectedItem) {
                 0 -> NewsScreen()

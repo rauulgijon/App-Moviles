@@ -53,7 +53,7 @@ fun SettingsScreen(userPrefs: UserPreference, onBack: () -> Unit) {
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            // Switch de Notificaciones
+            // Notificaciones
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -68,7 +68,6 @@ fun SettingsScreen(userPrefs: UserPreference, onBack: () -> Unit) {
                 )
             }
 
-            // Aquí puedes añadir más ajustes en el futuro si quieres
         }
     }
 }

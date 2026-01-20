@@ -6,7 +6,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -14,10 +13,10 @@ val Typography = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp,
-        color = TextBlack // Usamos TextBlack por defecto
+        color = TextBlack
     ),
 
-    // Títulos grandes (ej: Nombres de Pantallas)
+    // Títulos grandes
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
@@ -26,7 +25,7 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
 
-    // Etiquetas pequeñas (ej: "Ronda 1")
+    // Etiquetas pequeñas
     labelSmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,

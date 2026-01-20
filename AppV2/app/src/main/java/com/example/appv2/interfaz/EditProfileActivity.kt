@@ -24,6 +24,7 @@ class EditProfileActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppV2Theme {
+                // Finish para que el boton de volver cierra la actividad
                 EditProfileScreen(onBack = { finish() })
             }
         }

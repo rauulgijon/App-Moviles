@@ -27,6 +27,7 @@ private const val STORAGE_BASE_URL = "https://rqyytwpfcezjtndbjkwj.supabase.co/s
 
 @Composable
 fun DriverScreen(viewModel: DriverViewModel = viewModel()) {
+    // Guarda que piloto se ha pulsado
     val selectedDriver = viewModel.selectedDriver
     if (selectedDriver != null) {
         DriverDetailScreen(driver = selectedDriver, onBack = { viewModel.onDriverSelected(null) })

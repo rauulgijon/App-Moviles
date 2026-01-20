@@ -20,7 +20,6 @@ class RaceViewModel(application: Application) : AndroidViewModel(application) {
     var selectedRace by mutableStateOf<Race?>(null)
         private set
 
-    // NUEVOS ESTADOS PARA RESULTADOS
     var raceResults by mutableStateOf<List<RaceResult>>(emptyList())
         private set
     var isResultsLoading by mutableStateOf(false)
@@ -46,7 +45,7 @@ class RaceViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onBackToCalendar() {
         selectedRace = null
-        raceResults = emptyList() // Limpiamos para que no salga la lista vieja al abrir otra
+        raceResults = emptyList()
     }
 
     private fun loadRaceResults(raceId: Int) {

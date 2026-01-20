@@ -56,7 +56,7 @@ fun ProfileScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Datos del usuario (Dinámicos desde DataStore)
+        // Datos del usuario
         Text(text = userName, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Text(text = userEmail, style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
 

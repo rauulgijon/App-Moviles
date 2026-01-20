@@ -13,6 +13,6 @@ data class Team(
     val logo: String?,
     @SerialName("car_image")
     val carImage: String? = null,
-    @SerialName("total_points") // Mapea la suma de puntos de sus pilotos
+    @SerialName("total_points")
     val points: Int? = 0
 )
